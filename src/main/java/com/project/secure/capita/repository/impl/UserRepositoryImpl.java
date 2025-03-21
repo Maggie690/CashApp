@@ -57,6 +57,7 @@ public class UserRepositoryImpl implements UserRepository<User> {
 
             return user;
         } catch (Exception exception) {
+            log.error(exception.getMessage());
             throw new ApiException("An error occurred. Please try again.");
         }
     }
@@ -82,13 +83,13 @@ public class UserRepositoryImpl implements UserRepository<User> {
     }
 
     private int getEmailAccount(String email) {
-        return jdbc.queryForObject(COUNT_USE_EMAIL_QUERY, Map.of("email", email), Integer.class);
+        return jdbc.queryForObject(COUNT_USER_EMAIL_QUERY, Map.of("email", email), Integer.class);
     }
 
     private SqlParameterSource getSqlParameterSource(User user) {
         return new MapSqlParameterSource()
-                .addValue("firstname", user.getFirstName())
-                .addValue("lastname", user.getLastName())
+                .addValue("firstName", user.getFirstName())
+                .addValue("lastName", user.getLastName())
                 .addValue("email", user.getEmail())
                 .addValue("password", encoder.encode(user.getPassword()));
     }
